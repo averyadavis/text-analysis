@@ -9,7 +9,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -45,9 +44,7 @@ public class TextAnalyzer {
 		doc = new CoreDocument(t.getParagraph());
 		pipeline.annotate(doc);
 		
-		List<CoreSentence> sentences = doc.sentences();
-		
-		for(CoreSentence sentence : sentences){
+		for(CoreSentence sentence : doc.sentences()){
 			collectDates(sentence);
 			collectPronouns(sentence);
 			collectSentiments(sentence);
@@ -114,8 +111,10 @@ public class TextAnalyzer {
 	}
 
 	private long analyseDates() {
-		if(dates.size() < 2)
-			return 0;
+		if(dates.size() < 2) {
+			dates.clear();
+			return 0;			
+		}
 		
 		LocalDate first = dates.first().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 		LocalDate last = dates.last().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
