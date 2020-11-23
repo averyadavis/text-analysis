@@ -13,8 +13,8 @@ public class Analysis {
 	public Long getTimeDuration() {
 		return timeDuration;
 	}
-	public void setTimeDuration(long l) {
-		this.timeDuration = l;
+	public void setTimeDuration(long timeDuration) {
+		this.timeDuration = timeDuration;
 	}
 	public String getFemaleIdentified() {
 		return femaleIdentified;
