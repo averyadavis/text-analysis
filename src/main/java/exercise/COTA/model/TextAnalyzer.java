@@ -1,13 +1,11 @@
 package exercise.COTA.model;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.SortedSet;
@@ -28,14 +26,14 @@ public class TextAnalyzer {
 	
     private static String dateregex = "\\d{2}/\\d{2}/\\d{4}";
     private static Pattern datepattern = Pattern.compile(dateregex);
-    private static SimpleDateFormat dateformat = new SimpleDateFormat("MM/dd/yyyy");
+    private static DateTimeFormatter dateformat = DateTimeFormatter.ofPattern("MM/dd/yyyy");
 	
     private static String[] femalePronouns = new String[]{"she", "her", "hers"};
 
     private static StanfordCoreNLP pipeline = Pipeline.getPipeline();
     private CoreDocument doc;
 	
-    private SortedSet<Date> dates = new TreeSet<>();
+    private SortedSet<LocalDate> dates = new TreeSet<>();
     private Set<String> pronouns = new HashSet<>();
     private Set<String> sentiments = new HashSet<>();
 
@@ -116,8 +114,8 @@ public class TextAnalyzer {
 			return 0;			
 		}
 		
-		LocalDate first = dates.first().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-		LocalDate last = dates.last().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+		LocalDate first = dates.first();
+		LocalDate last = dates.last();
 		
 		dates.clear();
 		
@@ -140,9 +138,9 @@ public class TextAnalyzer {
 	    
 	    while (matcher.find()) {
 	        try {
-	        	Date date = dateformat.parse(matcher.group());
+	        	LocalDate date = LocalDate.parse(matcher.group(), dateformat);
 				dates.add(date);
-			} catch (ParseException e) {
+			} catch (DateTimeParseException e) {
 				System.err.println("Failed to parse token " + matcher.group() + " as valid date, will be ignored in duration calculation" );
 			}
 	    }
