@@ -50,14 +50,14 @@ public class TextAnalyzer {
 		
 		Analysis analysis = new Analysis();
 		
-		analysis.setTimeDuration(analyseDates());
-		analysis.setFemaleIdentified(analysePronouns());
-		analysis.setSentiment(analyseSentiments());
+		analysis.setTimeDuration(analyzeDates());
+		analysis.setFemaleIdentified(analyzePronouns());
+		analysis.setSentiment(analyzeSentiments());
 
 		return analysis;
 	}
 
-	private String analyseSentiments() {
+	private String analyzeSentiments() {
 		int positive = 0, neutral = 0, negative = 0;
 
 		for(String sentiment : sentiments) {
@@ -97,7 +97,7 @@ public class TextAnalyzer {
 		
 	}
 
-	private String analysePronouns() {
+	private String analyzePronouns() {
 		String femaleIdentified = 
 			Collections.disjoint(pronouns, Arrays.asList(femalePronouns)) 
 					? "other"
@@ -108,7 +108,7 @@ public class TextAnalyzer {
 		return femaleIdentified;
 	}
 
-	private long analyseDates() {
+	private long analyzeDates() {
 		if(dates.size() < 2) {
 			dates.clear();
 			return 0;			
